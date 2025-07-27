@@ -49,6 +49,8 @@ pnpm test:unit
 
 ```sh
 # Install browsers for the first run
+pnpm exec playwright install
+# Or
 npx playwright install
 
 # When testing on CI, must build the project first
@@ -68,4 +70,31 @@ pnpm test:e2e --debug
 
 ```sh
 pnpm lint
+```
+
+## 📁 Project Structure
+
+```
+horse-race/
+├── src/
+│   ├── core/                    # Core functionality
+│   │   ├── components/         # Base UI components
+│   │   │   ├── __tests__/      # Tests for components
+│   │   ├── composables/        # Shared composables
+│   │   ├── types/             # TypeScript definitions
+│   │   └── utils/             # Utility functions
+│   │
+│   ├── modules/                # Feature modules
+│   ├── layouts/               # Page layouts
+│   ├── assets/                # Static assets
+│   ├── App.vue               # Root component
+│   └── main.ts               # Application entry
+│
+├── e2e/ # End-to-end tests
+├── public/                    # Public static files
+├── .vscode/                   # VS Code settings
+├── vite.config.ts            # Vite configuration
+├── tsconfig.json             # TypeScript config
+├── package.json              # Dependencies
+└── README.md                 # You are here!
 ```
