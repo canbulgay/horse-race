@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "pinia": "^3.0.3",
-    "vue": "^3.5.17"
+    "vue": "^3.5.17",
+    "vuetify": "^3.9.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.53.1",

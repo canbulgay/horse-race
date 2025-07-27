@@ -20,6 +20,7 @@ Horse Racing Game Trial Day is an interactive front-end project developed using 
 - **ESLint** - Code linting with Vue 3 rules
 - **Playwright** - E2E testing
 - **Vitest** - Unit testing framework
+- **Vuetify** - Material Design UI library
 
 ## Project Setup
 
