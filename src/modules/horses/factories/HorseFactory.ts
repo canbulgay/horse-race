@@ -1,0 +1,34 @@
+import { faker } from '@faker-js/faker'
+import type { IHorse, IHorseFactory } from '../types'
+
+export class HorseFactory implements IHorseFactory {
+  /**
+   * Create between `min` and `max` horses.
+   * @param {number} count - Number of horses to create (default: 20)
+   * @param {number[]} conditionRange - Range for horse condition (default: [1, 100])
+   * @returns {Horse[]} Array of created horses
+   */
+  create(count = 20, conditionRange = { min: 1, max: 100 }): IHorse[] {
+    const names = faker.helpers.uniqueArray(faker.animal.horse, count)
+    const colors = faker.helpers
+      .uniqueArray(faker.color.human, count)
+      .map((color: string) => color.replace(/\s+/g, ''))
+
+    let nextId = 0
+    return Array.from({ length: count }, () => {
+      const horse: IHorse = {
+        id: nextId++,
+        name: names.pop() as string,
+        color: colors.pop() as string,
+        condition: this.getRandomInt(conditionRange.min, conditionRange.max),
+      }
+      return horse
+    })
+  }
+
+  private getRandomInt(a: number, b: number): number {
+    return Math.floor(Math.random() * (b - a + 1)) + a
+  }
+}
+
+export default HorseFactory

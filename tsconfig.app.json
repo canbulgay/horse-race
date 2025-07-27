@@ -8,7 +8,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@horses/*": ["./src/modules/horses/*"],
+      "@horses": ["./src/modules/horses/index.ts"]
     }
   }
 }
