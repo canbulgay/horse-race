@@ -1,18 +1,25 @@
-# horse-race
+# Horse Racing Game Trial Day
 
-This template should help get you started developing with Vue 3 in Vite.
+Horse Racing Game Trial Day is an interactive front-end project developed using Vue.js. The game simulates a virtual horse racing event with dynamic animations, randomized participants, and state-managed gameplay. The purpose of this project is to demonstrate proficiency in component-based architecture, clean code practices, and effective state management using Pinia.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Dynamic Horse Generation**: Creates 20 unique horses with randomized conditions
+- **Race Scheduling**: Automatic generation of 6 round racing schedules
+- **Real-time Animation**: Smooth race animations using RequestAnimationFrame
+- **State Management**: Centralized state using Pinia stores
+- **Modular Architecture**: Feature-based module organization
+- **TypeScript Ready**: Full TypeScript support with type definitions
 
-## Type Support for `.vue` Imports in TS
+## Technologies
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Vue 3.5+** - Progressive JavaScript framework
+- **Pinia** - Official Vue.js state management
+- **TypeScript** - Type-safe development
+- **Vite 5** - Next-generation frontend tooling
+- **ESLint** - Code linting with Vue 3 rules
+- **Playwright** - E2E testing
+- **Vitest** - Unit testing framework
 
 ## Project Setup
 
