@@ -22,9 +22,9 @@
         items-per-page="20"
         hide-default-footer
       >
-        <template v-slot:[`item.color`]="{ item }">
-          <v-chip :color="item.color" size="small" variant="flat" class="text-white">
-            {{ item.color }}
+        <template v-slot:[`item.colorName`]="{ item }">
+          <v-chip :color="item.colorHex" size="small" variant="flat" class="text-white">
+            {{ item.colorName }}
           </v-chip>
         </template>
 
@@ -60,7 +60,7 @@ const loading = computed(() => horseStore.loading)
 
 const headers: ITableHeader<IHorse>[] = [
   { title: 'Name', key: 'name', sortable: true },
-  { title: 'Color', key: 'color', sortable: true },
+  { title: 'Color', key: 'colorName', sortable: true },
   { title: 'Condition', key: 'condition', sortable: true },
 ]
 

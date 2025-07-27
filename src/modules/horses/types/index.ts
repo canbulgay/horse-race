@@ -1,7 +1,8 @@
 export type IHorse = {
   id: number
   name: string
-  color: string
+  colorHex: string
+  colorName: string
   condition: number
 }
 

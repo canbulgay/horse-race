@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker'
+
+import { getColorName } from '@/core/utils'
 import type { IHorse, IHorseFactory } from '../types'
 
 export class HorseFactory implements IHorseFactory {
@@ -10,16 +12,18 @@ export class HorseFactory implements IHorseFactory {
    */
   create(count = 20, conditionRange = { min: 1, max: 100 }): IHorse[] {
     const names = faker.helpers.uniqueArray(faker.animal.horse, count)
-    const colors = faker.helpers
-      .uniqueArray(faker.color.human, count)
-      .map((color: string) => color.replace(/\s+/g, ''))
+    const colors = faker.helpers.uniqueArray(() => faker.color.rgb({ casing: 'upper' }), count)
 
     let nextId = 0
     return Array.from({ length: count }, () => {
+      const colorHex = colors.pop() as string
+      const colorName = getColorName(colorHex)
+
       const horse: IHorse = {
         id: nextId++,
         name: names.pop() as string,
-        color: colors.pop() as string,
+        colorName: colorName,
+        colorHex: colorHex,
         condition: this.getRandomInt(conditionRange.min, conditionRange.max),
       }
       return horse
