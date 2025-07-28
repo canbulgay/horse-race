@@ -14,7 +14,7 @@
     :get-table-items="raceHorsesWithPosition"
   >
     <template v-slot:[`item.position`]="{ item }">
-      <v-chip color="primary" size="small" variant="outlined" class="font-weight-bold">
+      <v-chip color="primary" size="small" variant="flat" class="font-weight-bold">
         {{ item.position }}
       </v-chip>
     </template>

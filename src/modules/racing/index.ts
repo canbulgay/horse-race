@@ -5,3 +5,4 @@ export { default as RaceRepository } from './repositories/RaceRepository'
 export type { IRace, IRaceRepository, IRaceService, IRaceStore } from './types'
 
 export { default as RaceSchedule } from './components/RaceSchedule.vue'
+export { default as HorseRaceGame } from './components/HorseRaceGame.vue'
