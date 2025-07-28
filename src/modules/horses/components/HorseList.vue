@@ -44,19 +44,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 
+import { BaseTable } from '@core/components'
 import { useHorseStore } from '../stores/HorseStore'
-import BaseTable from '@core/components/BaseTable.vue'
 
 import type { ITableHeader } from '@core/types'
 import type { IHorse } from '../types'
 
 const horseStore = useHorseStore()
-
-// Computed properties
-const horses = computed(() => horseStore.list)
-const loading = computed(() => horseStore.loading)
+const { list: horses, loading } = storeToRefs(horseStore)
 
 const headers: ITableHeader<IHorse>[] = [
   { title: 'Name', key: 'name', sortable: true },

@@ -1,28 +1,24 @@
 import { defineStore } from 'pinia'
 import HorseService from '../services/HorseService'
-import type { IHorse } from '../types'
+import type { IHorse, IHorseStore } from '../types'
+
+type HorseState = Pick<IHorseStore, 'list' | 'loading' | 'error'>
+type HorseActions = Pick<IHorseStore, 'generate' | 'load' | 'clear' | 'setLoading' | 'setError'>
+type HorseGetters = Record<string, never>
 
 export const STORAGE_KEY = 'horses'
 
-export const useHorseStore = defineStore(STORAGE_KEY, {
-  state: () => ({
+export const useHorseStore = defineStore<
+  typeof STORAGE_KEY,
+  HorseState,
+  HorseGetters,
+  HorseActions
+>(STORAGE_KEY, {
+  state: (): HorseState => ({
     list: [] as IHorse[],
-    loading: false,
+    loading: false as boolean,
     error: null as string | null,
   }),
-
-  getters: {
-    getHorseById: (state) => (id: number) => {
-      return state.list.find((horse) => horse.id === id)
-    },
-    getHorses: (state) => {
-      return state.list
-    },
-
-    horseCount: (state) => state.list.length,
-    hasError: (state) => state.error !== null,
-    errorMessage: (state) => state.error,
-  },
 
   actions: {
     setLoading(loading: boolean) {
@@ -41,7 +37,6 @@ export const useHorseStore = defineStore(STORAGE_KEY, {
 
       try {
         const horses = HorseService.generate()
-        console.log('Generated horses:', horses)
         this.list = horses
         HorseService.save(horses)
       } catch (error) {

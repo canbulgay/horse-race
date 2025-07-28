@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import { getColorName } from '@/core/utils'
+import { GAME_CONFIG } from '@/core/contants'
 import type { IHorse, IHorseFactory } from '../types'
 
 export class HorseFactory implements IHorseFactory {
@@ -10,7 +11,10 @@ export class HorseFactory implements IHorseFactory {
    * @param {number[]} conditionRange - Range for horse condition (default: [1, 100])
    * @returns {Horse[]} Array of created horses
    */
-  create(count = 20, conditionRange = { min: 1, max: 100 }): IHorse[] {
+  create(
+    count = GAME_CONFIG.HORSES_COUNT,
+    conditionRange = { min: GAME_CONFIG.MIN_CONDITION, max: GAME_CONFIG.MAX_CONDITION },
+  ): IHorse[] {
     const names = faker.helpers.uniqueArray(faker.animal.horse, count)
     const colors = faker.helpers.uniqueArray(() => faker.color.rgb({ casing: 'upper' }), count)
 

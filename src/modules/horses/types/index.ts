@@ -25,7 +25,11 @@ export interface IHorseService {
 
 export interface IHorseStore {
   list: IHorse[]
+  loading: boolean
+  error: string | null
   generate(count?: number, conditionRange?: { min: number; max: number }): void
   load(): void
   clear(): void
+  setLoading(loading: boolean): void
+  setError(error: string | null): void
 }
