@@ -80,13 +80,22 @@ horse-race/
 ├── src/
 │   ├── core/                    # Core functionality
 │   │   ├── components/         # Base UI components
-│   │   │   ├── __tests__/      # Tests for components
 │   │   ├── composables/        # Shared composables
-│   │   ├── types/             # TypeScript definitions
+│   │   ├── types/             # Global TypeScript definitions
 │   │   └── utils/             # Utility functions
 │   │
 │   ├── modules/                # Feature modules
+│   │   └── horses/            # Horse management module
+│   │       ├── components/    # Horse-specific components
+│   │       ├── factories/     # Data generation
+│   │       ├── repositories/  # Data persistence layer
+│   │       ├── services/      # Business logic layer
+│   │       ├── stores/        # State management
+│   │       ├── types/         # Module-specific types
+│   │       └── index.ts       # Module exports
+│   │
 │   ├── layouts/               # Page layouts
+│   │   └── HorseRaceLayout.vue # Main application layout
 │   ├── assets/                # Static assets
 │   ├── App.vue               # Root component
 │   └── main.ts               # Application entry
