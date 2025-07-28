@@ -10,7 +10,9 @@
       "@core/*": ["./src/core/*"],
       "@assets/*": ["./src/assets/*"],
       "@horses/*": ["./src/modules/horses/*"],
-      "@horses": ["./src/modules/horses/index.ts"]
+      "@horses": ["./src/modules/horses/index.ts"],
+      "@racing/*": ["./src/modules/racing/*"],
+      "@racing": ["./src/modules/racing/index.ts"]
     }
   }
 }

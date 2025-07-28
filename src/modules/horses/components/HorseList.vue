@@ -2,9 +2,6 @@
   <v-card class="horse-list-card d-flex flex-column">
     <v-card-title class="d-flex align-center justify-space-between">
       <span class="text-h5">Horse List</span>
-      <v-btn size="medium" color="primary" class="pa-1" @click="horseMethods.generate">
-        Generate Horses
-      </v-btn>
     </v-card-title>
 
     <v-card-text class="horse-list-body pa-0">

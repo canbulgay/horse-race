@@ -13,6 +13,7 @@ export default defineConfig({
       '@core': fileURLToPath(new URL('./src/core', import.meta.url)),
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
       '@horses': fileURLToPath(new URL('./src/modules/horses', import.meta.url)),
+      '@racing': fileURLToPath(new URL('./src/modules/racing', import.meta.url)),
     },
   },
   test: {
