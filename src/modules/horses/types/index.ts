@@ -21,6 +21,7 @@ export interface IHorseService {
   save(horses: IHorse[]): void
   getAll(): IHorse[]
   clear(): void
+  getRandomHorses(count?: number): IHorse[]
 }
 
 export interface IHorseStore {
@@ -31,5 +32,6 @@ export interface IHorseStore {
   load(): void
   clear(): void
   setLoading(loading: boolean): void
+  loadOrGenerate(): void
   setError(error: string | null): void
 }

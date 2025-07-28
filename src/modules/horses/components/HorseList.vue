@@ -1,18 +1,13 @@
 <template>
-  <v-card>
+  <v-card class="horse-list-card d-flex flex-column">
     <v-card-title class="d-flex align-center justify-space-between">
       <span class="text-h5">Horse List</span>
-      <div class="d-flex gap-2">
-        <v-btn size="medium" color="primary" @click="horseMethods.generate">
-          Generate Horses
-        </v-btn>
-        <v-btn size="medium" color="error" @click="horseMethods.clear" :disabled="!horses.length">
-          Clear All
-        </v-btn>
-      </div>
+      <v-btn size="medium" color="primary" class="pa-1" @click="horseMethods.generate">
+        Generate Horses
+      </v-btn>
     </v-card-title>
 
-    <v-card-text>
+    <v-card-text class="horse-list-body pa-0">
       <BaseTable
         :headers="headers"
         :items="horses || []"
@@ -20,14 +15,13 @@
         no-data-text="No horses found"
         no-data-subtext="Generate some horses to get started"
         items-per-page="20"
-        hide-default-footer
+        height="800"
       >
         <template v-slot:[`item.colorName`]="{ item }">
           <v-chip :color="item.colorHex" size="small" variant="flat" class="text-white">
             {{ item.colorName }}
           </v-chip>
         </template>
-
         <template v-slot:[`item.condition`]="{ item }">
           <v-progress-linear
             :model-value="item.condition"
@@ -80,5 +74,18 @@ const getConditionColor = (condition: number): string => {
 
 onMounted(() => {
   horseStore.load()
+  if (horses.value.length === 0) {
+    horseStore.generate()
+  }
 })
 </script>
+
+<style scoped>
+.horse-list-card {
+  height: 800px;
+}
+.horse-list-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+</style>

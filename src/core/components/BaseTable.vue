@@ -5,6 +5,8 @@
     :loading="loading"
     :item-value="itemValue"
     class="elevation-1"
+    hide-default-footer
+    fixed-header
     v-bind="$attrs"
   >
     <!-- Pass through all slots -->
