@@ -11,14 +11,18 @@ export interface IHorseFactory {
 }
 
 export interface IHorseRepository {
-  getAll(): IHorse[]
-  save(horses: IHorse[]): void
-  clear(): void
+  findAll(): IHorse[]
+  create(horses: IHorse[]): void
+  removeAll(): void
 }
 
 export interface IHorseService {
   generate(): IHorse[]
+  save(horses: IHorse[]): void
+  getAll(): IHorse[]
+  clear(): void
 }
+
 export interface IHorseStore {
   list: IHorse[]
   generate(count?: number, conditionRange?: { min: number; max: number }): void

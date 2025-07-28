@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import HorseService from '../services/HorseService'
-import HorseRepository from '../repositories/HorseRepository'
 import type { IHorse } from '../types'
 
 export const STORAGE_KEY = 'horses'
@@ -44,7 +43,7 @@ export const useHorseStore = defineStore(STORAGE_KEY, {
         const horses = HorseService.generate()
         console.log('Generated horses:', horses)
         this.list = horses
-        HorseRepository.save(horses)
+        HorseService.save(horses)
       } catch (error) {
         console.error('Error generating horses:', error)
         this.setError('Failed to generate horses')
@@ -61,7 +60,7 @@ export const useHorseStore = defineStore(STORAGE_KEY, {
       this.setError(null)
 
       try {
-        this.list = HorseRepository.getAll()
+        this.list = HorseService.getAll()
       } catch (error) {
         console.error('Error loading horses:', error)
         this.setError('Failed to load horses')
@@ -79,7 +78,7 @@ export const useHorseStore = defineStore(STORAGE_KEY, {
 
       try {
         this.list = []
-        HorseRepository.clear()
+        HorseService.clear()
       } catch (error) {
         console.error('Error clearing horses:', error)
         this.setError('Failed to clear horses')

@@ -4,28 +4,28 @@ import { STORAGE_KEY } from '../stores/HorseStore'
 
 class HorseRepository implements IHorseRepository {
   /**
-   * Get all horses from localStorage.
+   * Find all horses from localStorage.
    * @returns {IHorse[]} Array of IHorse objects
    */
-  getAll(): IHorse[] {
+  findAll(): IHorse[] {
     return getItem<IHorse[]>(STORAGE_KEY, [])
   }
 
   /**
-   * Save horses to localStorage.
-   * @param horses - An array of Horse objects to save
+   * Create horses in localStorage.
+   * @param horses - An array of Horse objects to create
    * @return {void}
    */
-  save(horses: IHorse[]): void {
+  create(horses: IHorse[]): void {
     setItem(STORAGE_KEY, horses)
   }
 
   /**
    * Remove all horses from localStorage.
    */
-  clear(): void {
+  removeAll(): void {
     removeItem(STORAGE_KEY)
   }
 }
 
-export default new HorseRepository()
+export default HorseRepository
