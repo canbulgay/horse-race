@@ -85,13 +85,30 @@ horse-race/
 │   │   └── utils/             # Utility functions
 │   │
 │   ├── modules/                # Feature modules
-│   │   └── horses/            # Horse management module
-│   │       ├── components/    # Horse-specific components
-│   │       ├── factories/     # Data generation
-│   │       ├── repositories/  # Data persistence layer
-│   │       ├── services/      # Business logic layer
-│   │       ├── stores/        # State management
-│   │       ├── types/         # Module-specific types
+│   │   ├── horses/            # Horse management module
+│   │   │   ├── components/    # Horse-specific components
+│   │   │   ├── factories/     # Data generation
+│   │   │   ├── repositories/  # Data persistence layer
+│   │   │   ├── services/      # Business logic layer
+│   │   │   ├── stores/        # State management
+│   │   │   ├── types/         # Module-specific types
+│   │   │   └── index.ts       # Module exports
+│   │   │
+│   │   ├── racing/            # Race game module
+│   │   │   ├── components/    # Race UI and game engine
+│   │   │   ├── composables/   # Race logic composables
+│   │   │   ├── repositories/  # Race data persistence
+│   │   │   ├── services/      # Race business logic
+│   │   │   ├── stores/        # Race state management
+│   │   │   ├── types/         # Race-specific types
+│   │   │   └── index.ts       # Module exports
+│   │   │
+│   │   └── results/           # Results display module
+│   │       ├── components/    # Results UI components
+│   │       ├── repositories/  # Results data layer
+│   │       ├── services/      # Results processing
+│   │       ├── stores/        # Results state
+│   │       ├── types/         # Results types
 │   │       └── index.ts       # Module exports
 │   │
 │   ├── layouts/               # Page layouts
