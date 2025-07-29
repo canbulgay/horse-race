@@ -25,7 +25,11 @@
 
     <v-card-text class="pa-4">
       <div class="race-track">
-        <div v-for="horse in raceHorses" :key="horse.id" class="track-lane">
+        <div
+          v-for="horse in raceHorses"
+          :key="`${currentRace?.round}-${horse.id}`"
+          class="track-lane"
+        >
           <div class="track">
             <v-icon
               class="horse"
