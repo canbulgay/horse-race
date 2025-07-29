@@ -34,20 +34,9 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-  title?: string
-  loading?: boolean
-  isEmpty?: boolean
-  loadingText?: string
-  noDataTitle?: string
-  noDataSubtext?: string
-  cardClass?: string
-  titleClass?: string
-  contentClass?: string
-  bodyClass?: string
-}
+import type { IBaseCardProps } from '@core/types'
 
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<IBaseCardProps>(), {
   loading: false,
   isEmpty: false,
   loadingText: 'Loading...',

@@ -37,24 +37,9 @@
 <script setup lang="ts" generic="T, U extends Record<string, any> = any">
 import { ref } from 'vue'
 import { BaseTable, BaseCard, BaseExpansion } from '@core/components'
-import type { ITableHeader } from '@core/types'
+import type { IExpandableListProps } from '@core/types'
 
-interface Props {
-  title: string
-  items: T[]
-  loading?: boolean
-  loadingText?: string
-  noDataTitle?: string
-  noDataSubtext?: string
-  headers: ITableHeader<U>[]
-  tableNoDataText?: string
-  tableNoDataSubtext?: string
-  getItemKey: (item: T, index: number) => string | number
-  getItemTitle: (item: T, index: number) => string
-  getTableItems: (item: T) => U[]
-}
-
-withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<IExpandableListProps<T, U>>(), {
   loading: false,
   loadingText: 'Loading...',
   noDataTitle: 'No data found',

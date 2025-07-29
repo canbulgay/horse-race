@@ -13,12 +13,7 @@
         </template>
       </v-expansion-panel-title>
       <v-expansion-panel-text>
-        <slot 
-          name="content" 
-          :item="item" 
-          :index="index"
-          v-bind="$attrs"
-        />
+        <slot name="content" :item="item" :index="index" v-bind="$attrs" />
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -26,32 +21,23 @@
 
 <script setup lang="ts" generic="T">
 import { ref, watch } from 'vue'
+import type { IBaseExpansionPanelProps, IBaseExpansionPanelEmits } from '@core/types'
 
-interface Props {
-  items: T[]
-  getItemKey: (item: T, index: number) => string | number
-  getItemTitle: (item: T, index: number) => string
-  modelValue?: number
-}
-
-interface Emits {
-  (e: 'update:modelValue', value: number): void
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: 0
+const props = withDefaults(defineProps<IBaseExpansionPanelProps<T>>(), {
+  modelValue: 0,
 })
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<IBaseExpansionPanelEmits>()
 
 const activePanel = ref(props.modelValue)
 
-// Watch for external changes to modelValue
-watch(() => props.modelValue, (newValue) => {
-  activePanel.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    activePanel.value = newValue
+  },
+)
 
-// Emit changes back to parent
 watch(activePanel, (newValue) => {
   emit('update:modelValue', newValue)
 })
