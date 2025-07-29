@@ -42,8 +42,8 @@ export const useResultsStore = defineStore(STORAGE_KEY, () => {
    */
   const saveResult = (raceResult: IResult): void => {
     try {
-      list.value.push(raceResult)
       ResultService.save(raceResult)
+      list.value.push(raceResult)
 
       console.log(`Race result for round ${raceResult.round} saved successfully`)
     } catch (err) {
