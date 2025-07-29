@@ -7,5 +7,5 @@ import namer from 'color-namer'
  */
 export function getColorName(hex: string): string {
   const palettes = namer(hex)
-  return palettes.html[0].name || 'Unknown Color'
+  return palettes.html?.[0]?.name || 'Unknown Color'
 }

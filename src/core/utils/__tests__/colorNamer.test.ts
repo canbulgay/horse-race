@@ -1,72 +1,74 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { getColorName } from '../colorNamer'
 
 // Mock the color-namer module
 vi.mock('color-namer', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }))
 
 describe('getColorName', () => {
-  const mockNamer = vi.mocked(await import('color-namer')).default
+  let mockNamer: any
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    const colorNamerModule = await import('color-namer')
+    mockNamer = vi.mocked(colorNamerModule.default)
     vi.clearAllMocks()
   })
 
   it('should return the closest HTML color name for a valid hex color', () => {
     const mockResult = {
-      html: [{ name: 'red' }]
+      html: [{ name: 'red' }],
     }
     mockNamer.mockReturnValue(mockResult)
 
     const result = getColorName('#FF0000')
-    
+
     expect(mockNamer).toHaveBeenCalledWith('#FF0000')
     expect(result).toBe('red')
   })
 
   it('should handle hex colors without hash prefix', () => {
     const mockResult = {
-      html: [{ name: 'blue' }]
+      html: [{ name: 'blue' }],
     }
     mockNamer.mockReturnValue(mockResult)
 
     const result = getColorName('0000FF')
-    
+
     expect(mockNamer).toHaveBeenCalledWith('0000FF')
     expect(result).toBe('blue')
   })
 
   it('should return "Unknown Color" when no name is found', () => {
     const mockResult = {
-      html: [{ name: null }]
+      html: [{ name: null }],
     }
     mockNamer.mockReturnValue(mockResult)
 
     const result = getColorName('#123456')
-    
+
     expect(result).toBe('Unknown Color')
   })
 
   it('should return "Unknown Color" when name is undefined', () => {
     const mockResult = {
-      html: [{ name: undefined }]
+      html: [{ name: undefined }],
     }
     mockNamer.mockReturnValue(mockResult)
 
     const result = getColorName('#123456')
-    
+
     expect(result).toBe('Unknown Color')
   })
 
   it('should return "Unknown Color" when html array is empty', () => {
     const mockResult = {
-      html: []
+      html: [],
     }
     mockNamer.mockReturnValue(mockResult)
 
     const result = getColorName('#123456')
-    
+
     expect(result).toBe('Unknown Color')
   })
 
@@ -75,12 +77,12 @@ describe('getColorName', () => {
       { input: '#FFFFFF', expected: 'white' },
       { input: '#000000', expected: 'black' },
       { input: 'FFFF00', expected: 'yellow' },
-      { input: '#ff0000', expected: 'red' }
+      { input: '#ff0000', expected: 'red' },
     ]
 
     testCases.forEach(({ input, expected }) => {
       const mockResult = {
-        html: [{ name: expected }]
+        html: [{ name: expected }],
       }
       mockNamer.mockReturnValue(mockResult)
 
@@ -93,7 +95,7 @@ describe('getColorName', () => {
   it('should handle invalid hex colors gracefully', () => {
     // Even if namer throws or returns unexpected data, our function should handle it
     const mockResult = {
-      html: [{ name: 'gray' }]
+      html: [{ name: 'gray' }],
     }
     mockNamer.mockReturnValue(mockResult)
 
