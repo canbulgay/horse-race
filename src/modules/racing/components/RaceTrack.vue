@@ -1,8 +1,23 @@
 <template>
-  <v-card class="horse-race-game">
+  <!-- Show LeaderBoard when all races are finished -->
+  <LeaderBoard v-if="allRacesFinished" />
+  
+  <!-- Show start layout when no races are generated -->
+  <v-card v-else-if="races.length === 0" class="horse-race-game">
+    <v-card-text class="d-flex align-center justify-center" style="height: 400px;">
+      <div class="text-center">
+        <v-icon icon="mdi-horse" size="64" color="success" class="mb-4"></v-icon>
+        <div class="text-h6 mb-2">Welcome to Horse Racing</div>
+        <div class="text-body-2 text-grey">Generate a race program to get started</div>
+      </div>
+    </v-card-text>
+  </v-card>
+  
+  <!-- Show RaceTrack when there are pending races -->
+  <v-card v-else class="horse-race-game">
     <v-card-title class="d-flex align-center justify-space-between bg-success">
-      <span v-if="currentRace" class="text-h6 text-white">
-        Round {{ currentRace.round }} - {{ currentRace?.distance }}m
+      <span v-if="nextRace" class="text-h6 text-white">
+        Round {{ nextRace.round }} - {{ nextRace?.distance }}m
       </span>
       <v-btn
         v-if="canStartRace"
@@ -11,6 +26,9 @@
         @click="handleToggleRace"
       >
         Start Game
+      </v-btn>
+      <v-btn v-if="canResumeRace" color="primary" variant="outlined" @click="handleToggleRace">
+        Continue Race
       </v-btn>
       <v-btn
         v-if="isRacing"
@@ -26,8 +44,8 @@
     <v-card-text class="pa-4">
       <div class="race-track">
         <div
-          v-for="horse in raceHorses"
-          :key="`${currentRace?.round}-${horse.id}`"
+          v-for="horse in nextRace?.horses || []"
+          :key="`${nextRace?.round}-${horse.id}`"
           class="track-lane"
         >
           <div class="track">
@@ -61,34 +79,36 @@ import { storeToRefs } from 'pinia'
 import { useRaceStore } from '../stores/RaceStore'
 import { useRaceGame } from '../composables/useRaceGame'
 import { useResultsStore } from '@results/stores/ResultsStore'
-import type { IHorse } from '@horses/types'
-import type { IRace } from '../types'
+import LeaderBoard from './LeaderBoard.vue'
 
 const raceStore = useRaceStore()
 const resultsStore = useResultsStore()
-const { list: races } = storeToRefs(raceStore)
+const { list: races, nextRace } = storeToRefs(raceStore)
 const { list: raceResults } = storeToRefs(resultsStore)
 
 const { isRacing, isPaused, raceResult, horsePositions, toggleRace, resetRace } = useRaceGame()
 
 const animationSpeed = ref(100)
-const currentRaceIndex = ref(0)
+// const currentRaceIndex = ref(0)
 
-const currentRace = computed<IRace | null>(() => {
-  return races.value[currentRaceIndex.value] || null
-})
-
-const raceHorses = computed<IHorse[]>(() => {
-  return currentRace.value?.horses
-})
-
+// Show Start Game button only for Round 1 and when no races have started
 const canStartRace = computed(() => {
-  return raceResults?.value.length === 0 && !isRacing.value
+  return nextRace.value?.round === 1 && raceResults?.value.length === 0 && !isRacing.value
+})
+
+// Show Resume/Continue button for rounds after Round 1 (when some races are already finished)
+const canResumeRace = computed(() => {
+  return nextRace.value && nextRace.value.round > 1 && !isRacing.value
+})
+
+// Check if all races are finished (no pending races left)
+const allRacesFinished = computed(() => {
+  return races.value.length > 0 && !nextRace.value && !isRacing.value
 })
 
 const runAllRaces = async () => {
   for (let raceIndex = 0; raceIndex < races.value.length; raceIndex++) {
-    currentRaceIndex.value = raceIndex
+    // currentRaceIndex.value = raceIndex
     const race = races.value[raceIndex]
 
     if (race && race.status !== 'finished') {
@@ -116,7 +136,7 @@ const runAllRaces = async () => {
 }
 
 const handleToggleRace = async () => {
-  if (!currentRace.value) return
+  if (!nextRace.value) return
 
   if (!isRacing.value) {
     try {
@@ -125,7 +145,7 @@ const handleToggleRace = async () => {
       console.error('Race error:', error)
     }
   } else {
-    toggleRace(currentRace.value)
+    toggleRace(nextRace.value)
   }
 }
 
