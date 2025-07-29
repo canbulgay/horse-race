@@ -12,4 +12,5 @@ export type { RaceResult, HorseRaceData } from './services/RaceStateManager'
 
 export { default as RaceSchedule } from './components/RaceSchedule.vue'
 export { default as RaceTrack } from './components/RaceTrack.vue'
+export { default as GenerateProgramButton } from './components/GenerateProgramButton.vue'
 export * from './utils'

@@ -14,6 +14,7 @@ export default defineConfig({
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
       '@horses': fileURLToPath(new URL('./src/modules/horses', import.meta.url)),
       '@racing': fileURLToPath(new URL('./src/modules/racing', import.meta.url)),
+      '@results': fileURLToPath(new URL('./src/modules/results', import.meta.url)),
     },
   },
   test: {

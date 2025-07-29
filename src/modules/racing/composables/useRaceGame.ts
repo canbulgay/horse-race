@@ -99,6 +99,7 @@ export function useRaceGame(animationController = new AnimationService()) {
   }
 
   const resetRace = (): void => {
+    console.log('Reset Race Animation', animationId)
     if (animationId) {
       animationController.cancelAnimation(animationId)
       animationId = null

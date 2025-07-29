@@ -1,17 +1,18 @@
 <template>
   <ExpandableList
     title="Race Results"
-    :items="races"
+    :items="results"
     :loading="loading"
     loading-text="Loading results..."
     no-data-title="No Results Yet"
-    no-data-subtext="Race results will appear here after each round."
+    no-data-subtext="Race results will appear here after each round is finished."
     :headers="headers"
     table-no-data-text="No horses in this race"
     table-no-data-subtext="Something went wrong"
-    :get-item-key="(race, index) => race.round"
-    :get-item-title="(race, index) => `Round ${index + 1} - ${race.distance}m`"
+    :get-item-key="(result, index) => result.round"
+    :get-item-title="(result, index) => `Round ${result.round} - ${result.distance || 1000}m`"
     :get-table-items="raceHorsesWithPosition"
+    :active-panel-value="lastFinishedRaceIndex"
   >
     <template v-slot:[`item.position`]="{ item }">
       <v-chip
@@ -35,10 +36,10 @@
 <script setup lang="ts">
 import { ExpandableList } from '@core/components'
 import type { ITableHeader } from '@core/types'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import type { IHorse } from '@/modules/horses'
-import type { IRace } from '@/modules/racing/types'
-import { useRaceStore } from '@/modules/racing'
+import type { IResult } from '../types'
+import { useResultsStore } from '../stores/ResultsStore'
 import { storeToRefs } from 'pinia'
 
 const headers: ITableHeader<{ position: number; horse: IHorse }>[] = [
@@ -46,11 +47,15 @@ const headers: ITableHeader<{ position: number; horse: IHorse }>[] = [
   { title: 'Horse', key: 'horse', sortable: false },
 ]
 
-const raceStore = useRaceStore()
-const { list: races, loading } = storeToRefs(raceStore)
+const resultsStore = useResultsStore()
+const { list: results, loading } = storeToRefs(resultsStore)
 
-const raceHorsesWithPosition = (race: IRace) => {
-  return race.horses.map((horse, index) => ({
+const lastFinishedRaceIndex = computed(() => {
+  return results.value.length - 1
+})
+
+const raceHorsesWithPosition = (result: IResult) => {
+  return result.horses.map((horse, index) => ({
     position: index + 1,
     horse: horse,
   }))
@@ -63,6 +68,6 @@ const getPositionColor = (position: number): string => {
 }
 
 onMounted(() => {
-  raceStore.load()
+  resultsStore.load()
 })
 </script>

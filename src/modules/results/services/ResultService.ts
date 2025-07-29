@@ -23,12 +23,21 @@ class ResultService implements IResultService {
   }
 
   /**
-   * Save Results to the repository.
+   * Save a single result to the repository.
    *
-   * @param Results - An array of IResult objects to save
+   * @param result - A single IResult object to save
    */
-  save(results: IResult[]): void {
-    this.repository.create(results)
+  save(result: IResult): void {
+    this.repository.create(result)
+  }
+
+  /**
+   * Save multiple results to the repository.
+   *
+   * @param results - An array of IResult objects to save
+   */
+  saveAll(results: IResult[]): void {
+    results.forEach(result => this.repository.create(result))
   }
 
   /**

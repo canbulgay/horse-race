@@ -12,7 +12,9 @@
       "@horses/*": ["./src/modules/horses/*"],
       "@horses": ["./src/modules/horses/index.ts"],
       "@racing/*": ["./src/modules/racing/*"],
-      "@racing": ["./src/modules/racing/index.ts"]
+      "@racing": ["./src/modules/racing/index.ts"],
+      "@results/*": ["./src/modules/results/*"],
+      "@results": ["./src/modules/results/index.ts"]
     }
   }
 }

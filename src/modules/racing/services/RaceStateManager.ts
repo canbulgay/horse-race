@@ -132,6 +132,7 @@ export class RaceStateManager {
     this.isRacing.value = false
     this.isPaused.value = false
     this.raceResult.value = null
+    this.raceStartTime = 0
     this.currentRaceData = []
     this.totalPausedTime = 0
     this.pauseStartTime = 0

@@ -1,7 +1,7 @@
 import { getItem, setItem, removeItem } from '@core/utils'
 
 import type { IResult, IResultRepository } from '../types'
-import { STORAGE_KEY } from '../stores/ResultStore'
+import { STORAGE_KEY } from '../stores/ResultsStore'
 
 class ResultRepository implements IResultRepository {
   /**
@@ -13,13 +13,23 @@ class ResultRepository implements IResultRepository {
   }
 
   /**
-   * Create Results in localStorage.
-   * @param Results - An array of IResult objects to create
+   * Create a single result in localStorage by appending to existing results.
+   * @param result - A single IResult object to create
    *
    * @return {void}
    */
-  create(Results: IResult[]): void {
-    setItem(STORAGE_KEY, Results)
+  create(result: IResult): void {
+    const existingResults = this.findAll()
+
+    const existingIndex = existingResults.findIndex((r) => r.round === result.round)
+
+    if (existingIndex === -1) {
+      existingResults.push(result)
+      setItem(STORAGE_KEY, existingResults)
+    } else {
+      existingResults[existingIndex] = result
+      setItem(STORAGE_KEY, existingResults)
+    }
   }
 
   /**

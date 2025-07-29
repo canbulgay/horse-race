@@ -4,12 +4,13 @@ export type IResult = IRace
 
 export interface IResultRepository {
   findAll(): IResult[]
-  create(results: IResult): void
+  create(result: IResult): void
   removeAll(): void
 }
 
 export interface IResultService {
-  save(results: IResult): void
+  save(result: IResult): void
+  saveAll(results: IResult[]): void
   getAll(): IResult[]
   clear(): void
   generate(): IResult[]

@@ -1,12 +1,11 @@
 <template>
   <v-card class="horse-race-game">
     <v-card-title class="d-flex align-center justify-space-between bg-success">
-      <span class="text-h5 text-white">Race Track</span>
       <span v-if="currentRace" class="text-h6 text-white">
         Round {{ currentRace.round }} - {{ currentRace?.distance }}m
       </span>
       <v-btn
-        v-if="canStartRace && !isRacing"
+        v-if="canStartRace"
         :color="isRacing && !isPaused ? 'orange' : 'white'"
         variant="outlined"
         @click="handleToggleRace"
@@ -48,13 +47,6 @@
           </div>
         </div>
       </div>
-
-      <div v-if="raceResult" class="race-result mt-4">
-        <v-alert type="success" variant="tonal">
-          <template v-slot:title> Race Finished! </template>
-          Winner: <strong>{{ raceResult.winner.name }}</strong> ({{ raceResult.winner.colorName }})
-        </v-alert>
-      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -64,11 +56,14 @@ import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRaceStore } from '../stores/RaceStore'
 import { useRaceGame } from '../composables/useRaceGame'
+import { useResultsStore } from '@results/stores/ResultsStore'
 import type { IHorse } from '@horses/types'
 import type { IRace } from '../types'
 
 const raceStore = useRaceStore()
-const { pendingRaces: races } = storeToRefs(raceStore)
+const resultsStore = useResultsStore()
+const { list: races } = storeToRefs(raceStore)
+const { list: raceResults } = storeToRefs(resultsStore)
 
 const { isRacing, isPaused, raceResult, horsePositions, toggleRace, resetRace } = useRaceGame()
 
@@ -84,7 +79,7 @@ const raceHorses = computed<IHorse[]>(() => {
 })
 
 const canStartRace = computed(() => {
-  return races.value.length > 0 && currentRaceIndex.value < races.value.length
+  return raceResults?.value.length === 0 && !isRacing.value
 })
 
 const runAllRaces = async () => {
@@ -92,11 +87,20 @@ const runAllRaces = async () => {
     currentRaceIndex.value = raceIndex
     const race = races.value[raceIndex]
 
-    if (race) {
-      console.log(`Starting Round ${raceIndex + 1}`)
+    if (race && race.status !== 'finished') {
+      console.log(`Starting Round ${race.round}`)
       await toggleRace(race)
 
       raceStore.updateRaceStatus(race.round, 'finished')
+
+      if (raceResult.value) {
+        const raceWithResult = {
+          ...race,
+          horses: raceResult.value.positions.map((position) => position.horse),
+        }
+        resultsStore.saveResult(raceWithResult)
+        console.log(`Race result for round ${race.round} saved with race data`)
+      }
 
       if (raceIndex < races.value.length - 1) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -128,8 +132,8 @@ onMounted(() => {
 
 <style scoped>
 .horse-race-game {
-  height: 800px;
-  overflow: hidden;
+  height: 600px;
+  overflow: auto;
 }
 
 .race-info {
