@@ -66,8 +66,12 @@ export const useRaceStore = defineStore(STORAGE_KEY, () => {
     }
   }
 
+  const nextRace = computed(() => {
+    return list.value.find((race) => race.status === 'pending') || null
+  })
+
   const nextRound = computed(() => {
-    return list.value.find((race) => race.status === 'pending')?.round || 0
+    return list.value.find((race) => race.status === 'pending')?.round || 1
   })
 
   return {
@@ -79,5 +83,8 @@ export const useRaceStore = defineStore(STORAGE_KEY, () => {
     clear,
     load,
     updateRaceStatus,
+    nextRace,
+    setLoading,
+    setError,
   }
 })
