@@ -28,8 +28,10 @@ export class AnimationService implements IAnimationService {
         const matrix = computedStyle.transform
         if (matrix && matrix !== 'none') {
           const values = matrix.split('(')[1].split(')')[0].split(',')
-          const translateX = parseFloat(values[4]) || 0
-          positions[horseId] = translateX
+          const translateX = parseFloat(values[4])
+          if (!isNaN(translateX)) {
+            positions[horseId] = translateX
+          }
         }
       }
     })

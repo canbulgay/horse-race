@@ -60,7 +60,7 @@ export class RaceStateManager {
   }
 
   finishHorse(horseIndex: number, finishTime: number): void {
-    if (horseIndex < this.currentRaceData.length) {
+    if (horseIndex >= 0 && horseIndex < this.currentRaceData.length) {
       this.currentRaceData[horseIndex].finished = true
       this.currentRaceData[horseIndex].finishTime = finishTime
     }
