@@ -17,7 +17,7 @@
           </v-col>
 
           <v-col cols="12" md="5">
-            <HorseRaceGame />
+            <RaceTrack />
           </v-col>
 
           <v-col cols="12" md="2">
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { HorseList } from '@horses'
-import { RaceSchedule, HorseRaceGame } from '@/modules/racing'
+import { RaceSchedule, RaceTrack } from '@/modules/racing'
 import { GameResults } from '@/modules/results'
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <GenericListComponent
+  <ExpandableList
     title="Race Results"
     :items="races"
     :loading="loading"
@@ -25,27 +25,21 @@
     </template>
 
     <template v-slot:[`item.horse`]="{ item }">
-      <v-chip
-        :color="item.horse.colorHex"
-        size="small"
-        variant="flat"
-        class="text-white"
-      >
+      <v-chip :color="item.horse.colorHex" size="small" variant="flat" class="text-white">
         {{ item.horse.name }}
       </v-chip>
     </template>
-  </GenericListComponent>
+  </ExpandableList>
 </template>
 
 <script setup lang="ts">
-import { BaseTable, GenericListComponent } from '@core/components'
+import { ExpandableList } from '@core/components'
 import type { ITableHeader } from '@core/types'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import type { IHorse } from '@/modules/horses'
 import type { IRace } from '@/modules/racing/types'
 import { useRaceStore } from '@/modules/racing'
 import { storeToRefs } from 'pinia'
-
 
 const headers: ITableHeader<{ position: number; horse: IHorse }>[] = [
   { title: 'Position', key: 'position', sortable: false },
@@ -61,11 +55,10 @@ const raceHorsesWithPosition = (race: IRace) => {
     horse: horse,
   }))
 }
-// Simple position colors
 const getPositionColor = (position: number): string => {
-  if (position === 1) return '#FFD700' // Gold
-  if (position === 2) return '#C0C0C0' // Silver
-  if (position === 3) return '#CD7F32' // Bronze
+  if (position === 1) return '#FFD700'
+  if (position === 2) return '#C0C0C0'
+  if (position === 3) return '#CD7F32'
   return 'primary'
 }
 
@@ -73,4 +66,3 @@ onMounted(() => {
   raceStore.load()
 })
 </script>
-

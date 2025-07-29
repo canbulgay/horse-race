@@ -25,3 +25,11 @@ export interface IRaceStore {
   loading: boolean
   error: string | null
 }
+
+export interface IAnimationService {
+  getTrackWidth(): number
+  updateHorsePosition(horseId: number, position: number): void
+  captureCurrentPositions(): Record<number, number>
+  startAnimation(callback: () => void): number
+  cancelAnimation(animationId: number | null): void
+}

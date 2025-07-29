@@ -6,18 +6,27 @@
         Round {{ currentRaceIndex + 1 }} - {{ currentRace?.distance }}m
       </span>
       <v-btn
-        :disabled="!canStartRace && !isRacing"
+        v-if="canStartRace && !isRacing"
         :color="isRacing && !isPaused ? 'orange' : 'white'"
         variant="outlined"
         @click="handleToggleRace"
       >
-        {{ getButtonText }}
+        Start Game
+      </v-btn>
+      <v-btn
+        v-if="isRacing"
+        :disabled="!isRacing"
+        :color="isRacing && !isPaused ? 'orange' : 'white'"
+        variant="outlined"
+        @click="handleToggleRace"
+      >
+        {{ isPaused ? 'Resume' : 'Pause' }}
       </v-btn>
     </v-card-title>
 
     <v-card-text class="pa-4">
       <div class="race-track">
-        <div v-for="(horse, index) in raceHorses" :key="horse.id" class="track-lane">
+        <div v-for="horse in raceHorses" :key="horse.id" class="track-lane">
           <div class="track">
             <v-icon
               class="horse"
@@ -34,14 +43,12 @@
             <div class="finish-line"></div>
           </div>
 
-          <!-- Horse Info -->
           <div class="horse-info">
             <div class="horse-name">{{ horse.name }}</div>
           </div>
         </div>
       </div>
 
-      <!-- Race Status -->
       <div v-if="raceResult" class="race-result mt-4">
         <v-alert type="success" variant="tonal">
           <template v-slot:title> Race Finished! </template>
@@ -55,23 +62,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useHorseStore } from '@horses/stores/HorseStore'
 import { useRaceStore } from '../stores/RaceStore'
 import { useRaceGame } from '../composables/useRaceGame'
 import type { IHorse } from '@horses/types'
 import type { IRace } from '../types'
 
-const horseStore = useHorseStore()
 const raceStore = useRaceStore()
-const { list: horses } = storeToRefs(horseStore)
 const { list: races } = storeToRefs(raceStore)
-
-const isInCooldown = ref(false)
 
 const { isRacing, isPaused, raceResult, horsePositions, toggleRace, resetRace } = useRaceGame()
 
 const animationSpeed = ref(100)
 const currentRaceIndex = ref(0)
+
 const currentRace = computed<IRace | null>(() => {
   return races.value[currentRaceIndex.value] || null
 })
@@ -84,12 +87,6 @@ const canStartRace = computed(() => {
   return races.value.length > 0 && currentRaceIndex.value < races.value.length
 })
 
-const getButtonText = computed(() => {
-  if (!isRacing.value) return 'Start Race'
-  if (isPaused.value) return 'Resume'
-  return 'Pause'
-})
-
 const runAllRaces = async () => {
   for (let raceIndex = 0; raceIndex < races.value.length; raceIndex++) {
     currentRaceIndex.value = raceIndex
@@ -99,9 +96,7 @@ const runAllRaces = async () => {
       console.log(`Starting Round ${raceIndex + 1}`)
       await toggleRace(race)
 
-      // Wait a bit between races for visual transition
       if (raceIndex < races.value.length - 1) {
-        isInCooldown.value = true
         await new Promise((resolve) => setTimeout(resolve, 1000))
         resetRace()
       }
@@ -114,14 +109,12 @@ const handleToggleRace = async () => {
   if (!currentRace.value) return
 
   if (!isRacing.value) {
-    // Start all races continuously
     try {
       await runAllRaces()
     } catch (error) {
       console.error('Race error:', error)
     }
   } else {
-    // Toggle pause/resume current race
     toggleRace(currentRace.value)
   }
 }
@@ -129,7 +122,7 @@ const handleToggleRace = async () => {
 
 <style scoped>
 .horse-race-game {
-  height: 600px;
+  height: 800px;
   overflow: hidden;
 }
 

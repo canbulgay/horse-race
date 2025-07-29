@@ -6,6 +6,7 @@ import type { IResult, IResultService } from '../types'
 class ResultService implements IResultService {
   private repository = new ResultRepository()
   private raceService = RaceService
+
   /**
    * Generate Result rounds and return an array of IResult objects.
    *

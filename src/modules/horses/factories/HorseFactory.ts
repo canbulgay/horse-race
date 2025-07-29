@@ -25,7 +25,7 @@ export class HorseFactory implements IHorseFactory {
 
       const horse: IHorse = {
         id: nextId++,
-        name: names.pop() as string,
+        name: (names.pop() as string).split(' ').slice(0, 3).join(' '),
         colorName: colorName,
         colorHex: colorHex,
         condition: this.getRandomInt(conditionRange.min, conditionRange.max),

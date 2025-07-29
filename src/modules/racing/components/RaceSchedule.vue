@@ -1,5 +1,5 @@
 <template>
-  <GenericListComponent
+  <ExpandableList
     title="Race Schedule"
     :items="races"
     :loading="loading"
@@ -26,14 +26,14 @@
         </v-chip>
       </div>
     </template>
-  </GenericListComponent>
+  </ExpandableList>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { GenericListComponent } from '@core/components'
+import { ExpandableList } from '@core/components'
 import { useRaceStore } from '../stores/RaceStore'
 
 import type { ITableHeader } from '@core/types'
@@ -43,13 +43,11 @@ import type { IHorse } from '@horses/types'
 const raceStore = useRaceStore()
 const { list: races, loading } = storeToRefs(raceStore)
 
-// Headers for individual race tables
 const raceHeaders: ITableHeader<{ position: number; horse: IHorse }>[] = [
   { title: 'Position', key: 'position', sortable: false },
   { title: 'Horse', key: 'horse', sortable: false },
 ]
 
-// Transform race horses to include position
 const raceHorsesWithPosition = (race: IRace) => {
   return race.horses.map((horse, index) => ({
     position: index + 1,

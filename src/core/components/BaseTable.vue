@@ -9,12 +9,10 @@
     fixed-header
     v-bind="$attrs"
   >
-    <!-- Pass through all slots -->
     <template v-for="(_, slotName) in $slots" :key="slotName" #[slotName]="slotProps">
       <slot :name="slotName" v-bind="slotProps" />
     </template>
 
-    <!-- Default no-data slot -->
     <template #no-data v-if="!$slots['no-data']">
       <div class="text-center pa-4">
         <p class="text-h6 mt-2">{{ noDataText }}</p>

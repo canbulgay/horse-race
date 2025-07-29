@@ -1,14 +1,19 @@
 <template>
-  <v-card class="horse-list-card d-flex flex-column">
-    <v-card-title class="d-flex align-center justify-space-between">
-      <span class="text-h5">Horse List</span>
-    </v-card-title>
-
-    <v-card-text class="horse-list-body pa-0">
+  <BaseCard
+    title="Horse List"
+    :loading="loading"
+    :is-empty="(horses || []).length === 0"
+    loading-text="Loading horses..."
+    no-data-title="No horses found"
+    no-data-subtext="Generate some horses to get started"
+    card-class="horse-list-card d-flex flex-column"
+    body-class="horse-list-body pa-0"
+  >
+    <template #content>
       <BaseTable
         :headers="headers"
         :items="horses || []"
-        :loading="loading"
+        :loading="false"
         no-data-text="No horses found"
         no-data-subtext="Generate some horses to get started"
         items-per-page="20"
@@ -30,15 +35,15 @@
           </v-progress-linear>
         </template>
       </BaseTable>
-    </v-card-text>
-  </v-card>
+    </template>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { BaseTable } from '@core/components'
+import { BaseTable, BaseCard } from '@core/components'
 import { useHorseStore } from '../stores/HorseStore'
 
 import type { ITableHeader } from '@core/types'
@@ -52,15 +57,6 @@ const headers: ITableHeader<IHorse>[] = [
   { title: 'Color', key: 'colorName', sortable: true },
   { title: 'Condition', key: 'condition', sortable: true },
 ]
-
-const horseMethods = {
-  generate: () => {
-    horseStore.generate()
-  },
-  clear: () => {
-    horseStore.clear()
-  },
-}
 
 const getConditionColor = (condition: number): string => {
   if (condition >= 80) return 'success'
