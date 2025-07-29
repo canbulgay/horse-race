@@ -13,4 +13,9 @@ export interface IExpandableListProps<T, U extends Record<string, any> = any> {
   getItemKey: (item: T, index: number) => string | number
   getItemTitle: (item: T, index: number) => string
   getTableItems: (item: T) => U[]
+  activePanelValue?: number
+}
+
+export interface IExpandableListEmits {
+  (e: 'update:activePanelValue', value: number): void
 }

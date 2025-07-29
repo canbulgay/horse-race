@@ -12,6 +12,7 @@
     :get-item-key="(race, index) => race.round"
     :get-item-title="(race, index) => `Round ${index + 1} - ${race.distance}m`"
     :get-table-items="raceHorsesWithPosition"
+    :active-panel-value="nextRound - 1"
   >
     <template v-slot:[`item.position`]="{ item }">
       <v-chip color="primary" size="small" variant="flat" class="font-weight-bold">
@@ -41,7 +42,7 @@ import type { IRace } from '../types'
 import type { IHorse } from '@horses/types'
 
 const raceStore = useRaceStore()
-const { list: races, loading } = storeToRefs(raceStore)
+const { list: races, loading, nextRound } = storeToRefs(raceStore)
 
 const raceHeaders: ITableHeader<{ position: number; horse: IHorse }>[] = [
   { title: 'Position', key: 'position', sortable: false },

@@ -14,7 +14,8 @@
         :items="items"
         :get-item-key="getItemKey"
         :get-item-title="getItemTitle"
-        v-model="activePanel"
+        :active-panel-value="activePanelValue"
+        @update:active-panel-value="emit('update:activePanelValue', $event)"
       >
         <template #content="{ item }">
           <BaseTable
@@ -35,9 +36,8 @@
 </template>
 
 <script setup lang="ts" generic="T, U extends Record<string, any> = any">
-import { ref } from 'vue'
 import { BaseTable, BaseCard, BaseExpansion } from '@core/components'
-import type { IExpandableListProps } from '@core/types'
+import type { IExpandableListProps, IExpandableListEmits } from '@core/types'
 
 withDefaults(defineProps<IExpandableListProps<T, U>>(), {
   loading: false,
@@ -46,9 +46,10 @@ withDefaults(defineProps<IExpandableListProps<T, U>>(), {
   noDataSubtext: 'No items available',
   tableNoDataText: 'No data in this item',
   tableNoDataSubtext: 'Something went wrong',
+  activePanelValue: 0,
 })
 
-const activePanel = ref(0)
+const emit = defineEmits<IExpandableListEmits>()
 </script>
 
 <style scoped>

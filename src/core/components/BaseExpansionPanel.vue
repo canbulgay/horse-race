@@ -6,10 +6,7 @@
           {{ getItemTitle(item, index) }}
         </span>
         <template v-slot:actions="{ expanded }">
-          <v-icon
-            :color="!expanded ? 'teal' : ''"
-            :icon="expanded ? 'mdi-pencil' : 'mdi-check'"
-          ></v-icon>
+          <v-icon :color="getIconColor(item, expanded)" :icon="getIcon(item, expanded)"></v-icon>
         </template>
       </v-expansion-panel-title>
       <v-expansion-panel-text>
@@ -24,21 +21,41 @@ import { ref, watch } from 'vue'
 import type { IBaseExpansionPanelProps, IBaseExpansionPanelEmits } from '@core/types'
 
 const props = withDefaults(defineProps<IBaseExpansionPanelProps<T>>(), {
-  modelValue: 0,
+  activePanelValue: 0,
 })
 
 const emit = defineEmits<IBaseExpansionPanelEmits>()
 
-const activePanel = ref(props.modelValue)
+const activePanel = ref(props.activePanelValue)
 
 watch(
-  () => props.modelValue,
+  () => props.activePanelValue,
   (newValue) => {
     activePanel.value = newValue
   },
 )
 
 watch(activePanel, (newValue) => {
-  emit('update:modelValue', newValue)
+  emit('update:activePanelValue', newValue)
 })
+
+const getIcon = (item: T, expanded: boolean): string => {
+  if (hasStatus(item)) {
+    return item.status === 'finished' ? 'mdi-check' : 'mdi-clock-outline'
+  }
+
+  return expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'
+}
+
+const getIconColor = (item: T, expanded: boolean): string => {
+  if (hasStatus(item)) {
+    return item.status === 'finished' ? 'teal' : 'warning'
+  }
+
+  return ''
+}
+
+const hasStatus = (item: T): item is T & { status: string } => {
+  return typeof item === 'object' && item !== null && 'status' in item
+}
 </script>

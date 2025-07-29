@@ -3,7 +3,7 @@
     <v-card-title class="d-flex align-center justify-space-between bg-success">
       <span class="text-h5 text-white">Race Track</span>
       <span v-if="currentRace" class="text-h6 text-white">
-        Round {{ currentRaceIndex + 1 }} - {{ currentRace?.distance }}m
+        Round {{ currentRace.round }} - {{ currentRace?.distance }}m
       </span>
       <v-btn
         v-if="canStartRace && !isRacing"
@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRaceStore } from '../stores/RaceStore'
 import { useRaceGame } from '../composables/useRaceGame'
@@ -68,7 +68,7 @@ import type { IHorse } from '@horses/types'
 import type { IRace } from '../types'
 
 const raceStore = useRaceStore()
-const { list: races } = storeToRefs(raceStore)
+const { pendingRaces: races } = storeToRefs(raceStore)
 
 const { isRacing, isPaused, raceResult, horsePositions, toggleRace, resetRace } = useRaceGame()
 
@@ -80,7 +80,7 @@ const currentRace = computed<IRace | null>(() => {
 })
 
 const raceHorses = computed<IHorse[]>(() => {
-  return currentRace.value?.horses || []
+  return currentRace.value?.horses
 })
 
 const canStartRace = computed(() => {
@@ -95,6 +95,8 @@ const runAllRaces = async () => {
     if (race) {
       console.log(`Starting Round ${raceIndex + 1}`)
       await toggleRace(race)
+
+      raceStore.updateRaceStatus(race.round, 'finished')
 
       if (raceIndex < races.value.length - 1) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -118,6 +120,10 @@ const handleToggleRace = async () => {
     toggleRace(currentRace.value)
   }
 }
+
+onMounted(() => {
+  raceStore.load()
+})
 </script>
 
 <style scoped>

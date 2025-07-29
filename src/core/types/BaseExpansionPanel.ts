@@ -2,9 +2,9 @@ export interface IBaseExpansionPanelProps<T> {
   items: T[]
   getItemKey: (item: T, index: number) => string | number
   getItemTitle: (item: T, index: number) => string
-  modelValue?: number
+  activePanelValue?: number
 }
 
 export interface IBaseExpansionPanelEmits {
-  (e: 'update:modelValue', value: number): void
+  (e: 'update:activePanelValue', value: number): void
 }

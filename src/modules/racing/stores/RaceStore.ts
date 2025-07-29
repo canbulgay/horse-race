@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import RaceService from '../services/RaceService'
 import type { IRace } from '../types'
@@ -58,12 +58,31 @@ export const useRaceStore = defineStore(STORAGE_KEY, () => {
     RaceService.clear()
   }
 
+  const updateRaceStatus = (round: number, status: 'pending' | 'finished'): void => {
+    const raceIndex = list.value.findIndex((race) => race.round === round)
+    if (raceIndex !== -1) {
+      list.value[raceIndex].status = status
+      RaceService.save(list.value)
+    }
+  }
+
+  const pendingRaces = computed(() => {
+    return list.value.filter((race) => race.status !== 'finished')
+  })
+
+  const nextRound = computed(() => {
+    return list.value.find((race) => race.status === 'pending')?.round || 0
+  })
+
   return {
     list,
     loading,
     error,
+    nextRound,
+    pendingRaces,
     generate,
     clear,
     load,
+    updateRaceStatus,
   }
 })

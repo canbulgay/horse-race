@@ -3,7 +3,7 @@ import type { IHorse } from '@horses/types'
 export type IRace = {
   horses: IHorse[]
   round: number
-  status?: 'pending' | 'finished' | 'active'
+  status?: 'pending' | 'finished'
   distance?: number
 }
 
