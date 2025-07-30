@@ -3,10 +3,27 @@ import { RaceStateManager, type RaceResult } from '../services/RaceStateManager'
 import { AnimationService } from '../services/AnimationService'
 import { calculateRaceDuration, calculateHorseSpeed, calculateVisualPosition } from '../utils/race'
 
-export function useRaceGame(animationController = new AnimationService()) {
-  const stateManager = new RaceStateManager()
+let globalStateManager: RaceStateManager | null = null
+let globalAnimationController: AnimationService | null = null
+let globalAnimationId: number | null = null
 
-  let animationId: number | null = null
+// Test helper function to reset global state
+export function resetGlobalState(): void {
+  globalStateManager = null
+  globalAnimationController = null
+  globalAnimationId = null
+}
+
+export function useRaceGame(animationController?: AnimationService) {
+  if (!globalStateManager) {
+    globalStateManager = new RaceStateManager()
+  }
+  if (!globalAnimationController) {
+    globalAnimationController = animationController || new AnimationService()
+  }
+
+  const stateManager = globalStateManager
+  const controller = globalAnimationController
 
   const startRace = (race: IRace): Promise<RaceResult> => {
     return new Promise((resolve) => {
@@ -24,13 +41,13 @@ export function useRaceGame(animationController = new AnimationService()) {
 
       stateManager.initializeRace(race.horses, horseSpeeds)
 
-      const trackWidth = animationController.getTrackWidth()
+      const trackWidth = controller.getTrackWidth()
 
       console.log(`Starting ${raceDistance}m race (estimated ${(raceDuration / 1000).toFixed(1)}s)`)
 
       const animate = () => {
         if (stateManager.isPaused.value) {
-          animationId = animationController.startAnimation(animate)
+          globalAnimationId = controller.startAnimation(animate)
           return
         }
 
@@ -57,22 +74,22 @@ export function useRaceGame(animationController = new AnimationService()) {
         })
 
         if (!stateManager.areAllHorsesFinished()) {
-          animationId = animationController.startAnimation(animate)
+          globalAnimationId = controller.startAnimation(animate)
         } else {
           const result = stateManager.finalizeRace(raceDistance)
           console.log(result)
-          animationId = null
+          globalAnimationId = null
           resolve(result)
         }
       }
 
-      animationId = animationController.startAnimation(animate)
+      globalAnimationId = controller.startAnimation(animate)
     })
   }
 
   const pauseRace = (): void => {
     if (stateManager.isRacing.value && !stateManager.isPaused.value) {
-      const currentPositions = animationController.captureCurrentPositions()
+      const currentPositions = controller.captureCurrentPositions()
       stateManager.updateHorsePositionsFromExternal(currentPositions)
 
       stateManager.pauseRace()
@@ -99,10 +116,9 @@ export function useRaceGame(animationController = new AnimationService()) {
   }
 
   const resetRace = (): void => {
-    console.log('Reset Race Animation', animationId)
-    if (animationId) {
-      animationController.cancelAnimation(animationId)
-      animationId = null
+    if (globalAnimationId) {
+      controller.cancelAnimation(globalAnimationId)
+      globalAnimationId = null
     }
     stateManager.resetRace()
     console.log('Race reset')

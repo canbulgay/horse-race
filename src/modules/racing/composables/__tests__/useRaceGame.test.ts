@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { useRaceGame } from '../useRaceGame'
+import { useRaceGame, resetGlobalState } from '../useRaceGame'
 import { RaceStateManager } from '../../services/RaceStateManager'
 import { AnimationService } from '../../services/AnimationService'
 import {
@@ -42,19 +42,9 @@ describe('useRaceGame', () => {
     distance: 1200,
   }
 
-  const sampleRaceResult = {
-    winner: sampleHorses[0],
-    distance: 1200,
-    raceTime: 5000,
-    positions: [
-      { position: 1, horse: sampleHorses[0], finishTime: 4800 },
-      { position: 2, horse: sampleHorses[1], finishTime: 5000 },
-      { position: 3, horse: sampleHorses[2], finishTime: 5200 },
-    ],
-  }
-
   beforeEach(() => {
     vi.clearAllMocks()
+    resetGlobalState()
 
     // Setup RaceStateManager mock
     mockStateManager = {
@@ -312,7 +302,6 @@ describe('useRaceGame', () => {
 
       expect(mockAnimationService.cancelAnimation).toHaveBeenCalledWith(123)
       expect(mockStateManager.resetRace).toHaveBeenCalled()
-      expect(mockConsoleLog).toHaveBeenCalledWith('Reset Race Animation', 123)
       expect(mockConsoleLog).toHaveBeenCalledWith('Race reset')
     })
 
@@ -323,7 +312,6 @@ describe('useRaceGame', () => {
 
       expect(mockAnimationService.cancelAnimation).not.toHaveBeenCalled()
       expect(mockStateManager.resetRace).toHaveBeenCalled()
-      expect(mockConsoleLog).toHaveBeenCalledWith('Reset Race Animation', null)
       expect(mockConsoleLog).toHaveBeenCalledWith('Race reset')
     })
   })
@@ -426,12 +414,13 @@ describe('useRaceGame', () => {
   })
 
   describe('performance considerations', () => {
-    it('should not create multiple state managers', () => {
+    it('should create singleton state managers', () => {
       useRaceGame()
       useRaceGame()
       useRaceGame()
 
-      expect(RaceStateManager).toHaveBeenCalledTimes(3)
+      // With singleton pattern, RaceStateManager should only be created once
+      expect(RaceStateManager).toHaveBeenCalledTimes(1)
     })
 
     it('should reuse provided animation service', () => {
