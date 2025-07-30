@@ -18,7 +18,6 @@ Horse Racing Game Trial Day is an interactive front-end project developed using 
 - **TypeScript** - Type-safe development
 - **Vite 5** - Next-generation frontend tooling
 - **ESLint** - Code linting with Vue 3 rules
-- **Playwright** - E2E testing
 - **Vitest** - Unit testing framework
 - **Vuetify** - Material Design UI library
 
@@ -44,27 +43,6 @@ pnpm build
 
 ```sh
 pnpm test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-pnpm exec playwright install
-# Or
-npx playwright install
-
-# When testing on CI, must build the project first
-pnpm build
-
-# Runs the end-to-end tests
-pnpm test:e2e
-# Runs the tests only on Chromium
-pnpm test:e2e --project=chromium
-# Runs the tests of a specific file
-pnpm test:e2e tests/example.spec.ts
-# Runs the tests in debug mode
-pnpm test:e2e --debug
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
@@ -117,7 +95,6 @@ horse-race/
 │   ├── App.vue               # Root component
 │   └── main.ts               # Application entry
 │
-├── e2e/ # End-to-end tests
 ├── public/                    # Public static files
 ├── .vscode/                   # VS Code settings
 ├── vite.config.ts            # Vite configuration
