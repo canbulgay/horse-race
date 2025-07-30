@@ -1,10 +1,8 @@
 <template>
-  <!-- Show LeaderBoard when all races are finished -->
   <LeaderBoard v-if="allRacesFinished" />
-  
-  <!-- Show start layout when no races are generated -->
+
   <v-card v-else-if="races.length === 0" class="horse-race-game">
-    <v-card-text class="d-flex align-center justify-center" style="height: 400px;">
+    <v-card-text class="d-flex align-center justify-center" style="height: 400px">
       <div class="text-center">
         <v-icon icon="mdi-horse" size="64" color="success" class="mb-4"></v-icon>
         <div class="text-h6 mb-2">Welcome to Horse Racing</div>
@@ -12,8 +10,7 @@
       </div>
     </v-card-text>
   </v-card>
-  
-  <!-- Show RaceTrack when there are pending races -->
+
   <v-card v-else class="horse-race-game">
     <v-card-title class="d-flex align-center justify-space-between bg-success">
       <span v-if="nextRace" class="text-h6 text-white">
@@ -44,8 +41,8 @@
     <v-card-text class="pa-4">
       <div class="race-track">
         <div
-          v-for="horse in nextRace?.horses || []"
-          :key="`${nextRace?.round}-${horse.id}`"
+          v-for="(horse, index) in nextRace?.horses || []"
+          :key="`${nextRace?.round}-${horse.name}-${index}`"
           class="track-lane"
         >
           <div class="track">
@@ -89,26 +86,22 @@ const { list: raceResults } = storeToRefs(resultsStore)
 const { isRacing, isPaused, raceResult, horsePositions, toggleRace, resetRace } = useRaceGame()
 
 const animationSpeed = ref(100)
-// const currentRaceIndex = ref(0)
+const isCooldown = ref(false)
 
-// Show Start Game button only for Round 1 and when no races have started
 const canStartRace = computed(() => {
   return nextRace.value?.round === 1 && raceResults?.value.length === 0 && !isRacing.value
 })
 
-// Show Resume/Continue button for rounds after Round 1 (when some races are already finished)
 const canResumeRace = computed(() => {
-  return nextRace.value && nextRace.value.round > 1 && !isRacing.value
+  return nextRace.value && nextRace.value.round > 1 && !isRacing.value && !isCooldown.value
 })
 
-// Check if all races are finished (no pending races left)
 const allRacesFinished = computed(() => {
   return races.value.length > 0 && !nextRace.value && !isRacing.value
 })
 
 const runAllRaces = async () => {
   for (let raceIndex = 0; raceIndex < races.value.length; raceIndex++) {
-    // currentRaceIndex.value = raceIndex
     const race = races.value[raceIndex]
 
     if (race && race.status !== 'finished') {
@@ -127,8 +120,10 @@ const runAllRaces = async () => {
       }
 
       if (raceIndex < races.value.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        isCooldown.value = true
         resetRace()
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        isCooldown.value = false
       }
     }
   }
