@@ -15,10 +15,12 @@
 import { computed } from 'vue'
 import { useRaceStore } from '../stores/RaceStore'
 import { useResultsStore } from '@results/stores/ResultsStore'
+import { useRaceGame } from '../composables/useRaceGame'
 import { storeToRefs } from 'pinia'
 
 const raceStore = useRaceStore()
 const resultsStore = useResultsStore()
+const { isRacing, resetRace } = useRaceGame()
 const { loading, list: races } = storeToRefs(raceStore)
 
 const buttonText = computed(() => {
@@ -26,6 +28,10 @@ const buttonText = computed(() => {
 })
 
 const handleGenerateProgram = (): void => {
+  if (isRacing.value) {
+    resetRace()
+  }
+  
   raceStore.clear()
   resultsStore.clear()
 
